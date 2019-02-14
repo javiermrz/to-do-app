@@ -15,10 +15,16 @@ var argv = require("yargs")
 
 //console.log('Command: ' + process.argv[2]);
 
-var command = process.argv[2];
-var task = argsToString();
-var task_list = readFromJason();
+////////////////////////////////////////////////////
+// CLASS
+///////////////////////////////////////////////////
 
+///////////////////////////////////////////////////
+var taskList = require("./TaskListClass.js");
+taskList.tasks = readFromJason();
+var task = argsToString();
+
+var command = process.argv[2];
 switch (command) {
   case "add":
     executeAddCommand();
@@ -42,31 +48,33 @@ function executeAddCommand() {
   const taskNotIntroduced = task == -1;
   if (taskNotIntroduced) {
     handleInvalidTask();
-  } else if (taskDoesExist()) {
-    handleAlreadyExistingTask();
-  } else {
-    addTaskToList();
-    printTasksList(task_list);
-    writeToJason(task_list);
+    return;
   }
+  if (taskList.taskDoesExist(task)) {
+    handleAlreadyExistingTask();
+    return;
+  }
+  taskList.addTaskToList(task);
+  taskList.printTasksList();
+  taskList.writeToJason();
 }
 
 ///// DONE
 function executeDoneCommand() {
-  var index = findAMatch(task, task_list);
+  var index = taskList.findAMatch(task);
   let taskNotFound = index == -1;
   if (taskNotFound) {
     handleTaskNotFound();
   } else {
-    removeTask(index);
-    writeToJason(task_list);
+    taskList.removeTask(index);
+    taskList.writeToJason();
   }
-  printTasksList(task_list);
+  taskList.printTasksList();
 }
 
 ///// RETRIEVE
 function executeRetrieveCommand() {
-  printTasksList(task_list);
+  taskList.printTasksList();
 }
 
 ////////////////////////////////////////////////////
@@ -92,20 +100,6 @@ function handleAlreadyExistingTask() {
   console.log("Task already exists");
 }
 ///// OTHERS
-
-function printTasksList(list) {
-  console.log("\nPending tasks\n------------- ");
-  list.forEach(element => {
-    console.log("- " + element.task);
-  });
-  console.log();
-}
-
-function writeToJason(task_list) {
-  var json = JSON.stringify(task_list);
-  fs.writeFileSync("./task-list.json", json, "utf8");
-}
-
 function readFromJason() {
   var content = fs.readFileSync("./task-list.json");
   return JSON.parse(content);
@@ -120,26 +114,4 @@ function argsToString() {
     task += process.argv[i];
   }
   return task;
-}
-
-function findAMatch(task, task_list) {
-  for (let i = 0; i < task_list.length; i++) {
-    if (task === task_list[i].task) {
-      return i;
-    } else if (i == task_list.length - 1) return -1;
-  }
-}
-
-function taskDoesExist() {
-  return findAMatch(task, task_list) != -1;
-}
-
-function addTaskToList() {
-  task_list.push({ task: task });
-  console.log("Task has been added");
-}
-
-function removeTask(index) {
-  console.log(`Task has been removed: ${task_list[index].task}`);
-  task_list.splice(index, 1);
 }
