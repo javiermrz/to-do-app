@@ -12,14 +12,14 @@ You will then be able to read all the necessary **information** to manage the ap
 However, **keep reading** to know exactly how each of the commands works!
 
 * ### Retrieve
-This command is very symple. All you have to do is type the following:
+This command is very simple. All you have to do is type the following:
 ```
 node to-do-app.js retrieve
 ```  
-This will show you the pending tasks list.
+This will show you the **pending tasks list**.
 
 * ### Add
-This command will add a new task to the list.
+This command will **add** a new task to the list.
 All you have to do is type: 
 ```
 node to-do-app.js add Task
