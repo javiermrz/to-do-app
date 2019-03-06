@@ -24,7 +24,8 @@ All you have to do is type:
 ```
 node to-do-app.js add Task
 ``` 
-For example, ```node to-do-app.js add Do the shopping```.
+For example, ```node to-do-app.js add Do the shopping```
+This will also show you the resulting tasks list after making the respective changes to it.
 
 * ### Done
 This command will mark a task as done, and so it will **delete** it from your list.
@@ -33,4 +34,5 @@ All you have to do is type:
 ```
 node to-do-app.js done Task
 ``` 
-For example, ```node to-do-app.js done Do the shopping```.
+For example, ```node to-do-app.js done Do the shopping```
+This will also show you the resulting tasks list after making the respective changes to it.
